@@ -33,15 +33,22 @@ class Server():
             time.sleep(0.1)
 
     def remove_socket(self, socket):
-        self.clients_sockets.remove(socket)
+        #Le client a pu être déjà retiré par echo()
+        if socket in self.clients_sockets:
+            self.clients_sockets.remove(socket)
 
     def echo(self, data):
         print("echoing:", data)
+        #On note les clients déconnectés pour les retirer après la boucle
+        dead_sockets= []
         for sock in self.clients_sockets:
             try:
                 sock.sendall(data.encode("UTF-8"))
-            except socket.error:
-                print("Cannot send the message")
+            except OSError:
+                print("Client déconnecté, il est retiré de la liste")
+                dead_sockets.append(sock)
+        for sock in dead_sockets:
+            self.remove_socket(sock)
 
 
 #Demande le port au user : vide = 5555, sinon un nombre entre 1 et 65535

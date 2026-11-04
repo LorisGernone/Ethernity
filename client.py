@@ -52,13 +52,19 @@ class Client():
 
 
 if __name__ == "__main__":
-    validation = False
-    username= input("username: ")
+    pseudo_valide = False
+    port_validation = False
+    while pseudo_valide == False : 
+        username= input("username: ")
+        if username == "":
+            print("il faut un pseudo valide")
+        else : 
+            pseudo_valide = True
     server= input("server: ")
-    while validation == False:
+    while port_validation == False:
         try:
             port= int(input("port: "))
-            validation = True
+            port_validation = True
         except ValueError:
             print("Le port doit être un nombre")
     client= Client(username, server, port)

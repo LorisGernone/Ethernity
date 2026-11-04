@@ -1,4 +1,4 @@
-from socket import socket
+import socket
 import threading 
 import re 
 import time
@@ -19,7 +19,7 @@ class ClientListener(threading.Thread):
             data= ""
             try:
                 data = self.socket.recv(1024).decode('UTF-8')
-            except socket.error:
+            except OSError:
                 print("Unable to receive data")
             self.handle_msg(data)
             time.sleep(0.1)

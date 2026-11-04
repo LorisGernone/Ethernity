@@ -52,9 +52,15 @@ class Client():
 
 
 if __name__ == "__main__":
+    validation = False
     username= input("username: ")
     server= input("server: ")
-    port= int(input("port: "))
+    while validation == False:
+        try:
+            port= int(input("port: "))
+            validation = True
+        except ValueError:
+            print("Le port doit être un nombre")
     client= Client(username, server, port)
     client.listen()
     message= ""

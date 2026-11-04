@@ -67,7 +67,11 @@ if __name__ == "__main__":
             port_validation = True
         except ValueError:
             print("Le port doit être un nombre")
-    client= Client(username, server, port)
+     try:                                                        #essaie de se connecter au serveur. Si ca rate il renvoie un message au lieu de planter
+        client= Client(username, server, port)
+    except socket.error:
+        print("impossible d'accéder au serveur ! ")
+        sys.exit()
     client.listen()
     message= ""
     while message!="QUIT":

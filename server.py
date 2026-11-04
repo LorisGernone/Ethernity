@@ -29,6 +29,8 @@ class Server():
             self.clients_sockets.append(client_socket)
             print("Start the thread for client:", client_adress)
             client_thread= ClientListener(self, client_socket, client_adress)
+            #Le thread s'arrête avec le programme (comme dans client.py)
+            client_thread.daemon= True
             client_thread.start()
             time.sleep(0.1)
 
@@ -73,4 +75,9 @@ def ask_port():
 if __name__ == "__main__":
     port= ask_port()
     server= Server(port)
-    server.run()
+    #Ctrl+C lève KeyboardInterrupt : on arrête le serveur proprement
+    try:
+        server.run()
+    except KeyboardInterrupt:
+        print("Arrêt du serveur")
+        server.listener.close()

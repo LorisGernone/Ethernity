@@ -30,7 +30,9 @@ class ClientListener(threading.Thread):
         self.listening = False
         self.socket.close()
         self.server.remove_socket(self.socket)
-        self.server.echo("{0} has quit\n".format(self.username))
+        #Pas d'annonce si le client n'avait pas de pseudo (ex : recherche de serveurs)
+        if self.username != "No username":
+            self.server.echo("{0} has quit\n".format(self.username))
 
     def handle_msg(self, data):
         print(self.address, "sent :", data)
@@ -38,6 +40,9 @@ class ClientListener(threading.Thread):
         if username_result:
             self.username = username_result.group(1)
             self.server.echo("{0} has joined.\n".format(self.username))
+        elif data == "NAME":
+            #On répond seulement au client qui a demandé le nom
+            self.socket.sendall(self.server.name.encode("UTF-8"))
         elif data == "QUIT":
             self.quit()
         elif data == "":

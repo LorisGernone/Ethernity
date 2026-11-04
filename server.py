@@ -5,7 +5,8 @@ from clientthread import ClientListener
 
 class Server():
 
-    def __init__(self, port):
+    def __init__(self, port, name):
+        self.name= name
         self.listener= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #Si le port est déjà pris, on redemande un autre port au user
         while True:
@@ -72,9 +73,18 @@ def ask_port():
         print("Port invalide :", port, "- il doit être entre 1 et 65535")
 
 
+#Demande le nom du serveur au user : vide = Ethernity
+def ask_name():
+    name= input("Nom du serveur (Entrée = Ethernity par défaut) : ")
+    if name == "":
+        return "Ethernity"
+    return name
+
+
 if __name__ == "__main__":
     port= ask_port()
-    server= Server(port)
+    name= ask_name()
+    server= Server(port, name)
     #Ctrl+C lève KeyboardInterrupt : on arrête le serveur proprement
     try:
         server.run()

@@ -7,7 +7,14 @@ class Server():
 
     def __init__(self, port):
         self.listener= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.listener.bind(('', port))
+        #Si le port est déjà pris, on redemande un autre port au user
+        while True:
+            try:
+                self.listener.bind(('', port))
+                break
+            except OSError:
+                print("Le port", port, "est déjà utilisé (ou le serveur vient d'être arrêté : attendre 1 minute)")
+                port= ask_port()
         self.listener.listen(1)
         print("Listening on port", port)
         self.clients_sockets= []

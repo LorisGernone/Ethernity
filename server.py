@@ -36,23 +36,24 @@ class Server():
             except socket.error:
                 print("Cannot send the message")
 
+
 #Demande le port au user : vide = 5555, sinon un nombre entre 1 et 65535
-    def ask_port():
-        while True:
-            port_input= input("Port (Entrée = 5555 par défaut) : ")
-    
-            if port_input == "":
-                return 5555
-    
-            try:
-                port= int(port_input)
-            except ValueError:
-                print("Port invalide :", port_input, "- il faut un nombre")
-                continue
-    
-            if 1 <= port <= 65535:
-                return port
-            print("Port invalide :", port, "- il doit être entre 1 et 65535")
+def ask_port():
+    while True:
+        port_input= input("Port (Entrée = 5555 par défaut) : ")
+
+        if port_input == "":
+            return 5555
+
+        try:
+            port= int(port_input)
+        except ValueError:
+            print("Port invalide :", port_input, "- il faut un nombre")
+            continue
+
+        if 1 <= port <= 65535:
+            return port
+        print("Port invalide :", port, "- il doit être entre 1 et 65535")
 
 
 if __name__ == "__main__":

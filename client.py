@@ -1,8 +1,14 @@
+from tkinter import messagebox
 import threading
 import socket
 import time
 import re
 import sys
+import tkinter as tk
+
+
+
+
 
 class Client():
 
@@ -49,40 +55,46 @@ class Client():
         elif data=="":
             self.tidy_up()
         else:
-            print(data)
+            zone_messages.insert(tk.END, data + "\n")
 
-
-if __name__ == "__main__":
-    pseudo_valide = False
+def connecter():
+    global client
+    username = champ_pseudo.get()
+    server= "chat-srv.ecole.homelab"
     port_validation = False
 
-    
-    while pseudo_valide == False : 
-        username= input("username: ")
-        if username == "":
-            print("il faut un pseudo valide")
-        else : 
-            pseudo_valide = True
-    server= "chat-srv.ecole.homelab"
+    try:
+        port= int(5555)
+        port_validation = True
+    except ValueError:
+        zone_messages.insert(tk.END, "Le port doit être un nombre\n")
 
-    
-    while port_validation == False:
-        try:
-            port= int(5555)
-            port_validation = True
-        except ValueError:
-            print("Le port doit être un nombre")
 
-    
-    try:                                                        #essaie de se connecter au serveur. Si ca rate il renvoie un message au lieu de planter
-        client= Client(username, server, port)
-    except socket.error:
-        print("impossible d'accéder au serveur ! ")
-        sys.exit()
-    client.listen()
-    message= ""
+    if username == "":
+        zone_messages.insert(tk.END, "il faut un pseudo valide\n")
+    elif port_validation == True :
+        try:                                                                  #essaie de se connecter au serveur. Si ca rate il renvoie un message au lieu de planter
+            client= Client(username, server, port)
+        except socket.error:
+            zone_messages.insert(tk.END, "impossible d'accéder au serveur ! \n")
+        else:
+            client.listen()
 
-    
-    while message != "QUIT" and client.listening != False :     #s'arrete si le serveur est coupé OU si on rentre QUIT
-        message= input()
-        client.send(message)
+def envoyer():
+    message = champ_message.get()
+    client.send(message)
+    champ_message.delete(0, tk.END)
+
+
+fenetre = tk.Tk()
+fenetre.title("Ethernity")
+tk.Label(fenetre, text="Pseudo : ").pack()
+champ_pseudo = tk.Entry(fenetre)
+champ_pseudo.pack()
+tk.Button(fenetre, text="Se connecter", command=connecter).pack()
+zone_messages = tk.Text(fenetre, height=15, width= 50)
+zone_messages.pack()
+champ_message = tk.Entry(fenetre, width=40)
+champ_message.pack()
+tk.Button(fenetre, text="Envoyer", command=envoyer).pack()
+fenetre.mainloop()

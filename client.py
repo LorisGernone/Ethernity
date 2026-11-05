@@ -2,6 +2,7 @@ import threading
 import socket
 import time
 import re
+import sys
 
 class Client():
 
@@ -32,8 +33,8 @@ class Client():
     def send(self, message):
         try:
             username_result = re.search('^USERNAME (.*)$', message)
-            if not username_result:
-                if not username_result and message != "QUIT":                               #ajoute le pseudo devant les messages
+            if not username_result and message != "QUIT":        #ajoute le pseudo devant les messages
+                message= "{0}: {1}".format(self.username, message)
             self.socket.sendall(message.encode("UTF-8"))
         except socket.error:
             print("unable to send message")
@@ -67,7 +68,7 @@ if __name__ == "__main__":
             port_validation = True
         except ValueError:
             print("Le port doit être un nombre")
-     try:                                                        #essaie de se connecter au serveur. Si ca rate il renvoie un message au lieu de planter
+    try:                                                        #essaie de se connecter au serveur. Si ca rate il renvoie un message au lieu de planter
         client= Client(username, server, port)
     except socket.error:
         print("impossible d'accéder au serveur ! ")

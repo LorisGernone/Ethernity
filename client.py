@@ -63,12 +63,12 @@ if __name__ == "__main__":
             print("il faut un pseudo valide")
         else : 
             pseudo_valide = True
-    server= input("server: ")
+    server= "chat-srv.ecole.homelab"
 
     
     while port_validation == False:
         try:
-            port= int(input("port: "))
+            port= int(5555)
             port_validation = True
         except ValueError:
             print("Le port doit être un nombre")

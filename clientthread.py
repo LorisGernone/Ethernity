@@ -17,19 +17,37 @@ class ClientListener(threading.Thread):
     def run(self):
         while self.listening:
             data= ""
+            
             try:
+                # On recoit les messages du client
                 data = self.socket.recv(1024).decode('UTF-8')
+          
             except OSError:
+                # Si une erreur ce produit
                 print("Unable to receive data")
+                self.quit()
+                break
+
+            # On traite le message reçu
             self.handle_msg(data)
             time.sleep(0.1)
         print("Ending client thread for", self.address)
  
  
     def quit(self):
+        # Si le client est deja deconnecté on ne fait rien
+        if not self.listening:
+            return
+
+        # On indique que le client est déconnecté
         self.listening = False
+        
+        # On ferme la connection
         self.socket.close()
+      
+        # On retire le client du server
         self.server.remove_socket(self.socket)
+      
         #Pas d'annonce si le client n'avait pas de pseudo (ex : recherche de serveurs)
         if self.username != "No username":
             self.server.echo("{0} has quit\n".format(self.username))

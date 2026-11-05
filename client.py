@@ -74,6 +74,6 @@ if __name__ == "__main__":
         sys.exit()
     client.listen()
     message= ""
-    while message!="QUIT":
+    while message != "QUIT" and client.listening != False :     #s'arrete si le serveur est coupé OU si on rentre QUIT
         message= input()
         client.send(message)

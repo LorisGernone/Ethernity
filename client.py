@@ -55,6 +55,8 @@ class Client():
 if __name__ == "__main__":
     pseudo_valide = False
     port_validation = False
+
+    
     while pseudo_valide == False : 
         username= input("username: ")
         if username == "":
@@ -62,12 +64,16 @@ if __name__ == "__main__":
         else : 
             pseudo_valide = True
     server= input("server: ")
+
+    
     while port_validation == False:
         try:
             port= int(input("port: "))
             port_validation = True
         except ValueError:
             print("Le port doit être un nombre")
+
+    
     try:                                                        #essaie de se connecter au serveur. Si ca rate il renvoie un message au lieu de planter
         client= Client(username, server, port)
     except socket.error:
@@ -75,6 +81,8 @@ if __name__ == "__main__":
         sys.exit()
     client.listen()
     message= ""
+
+    
     while message != "QUIT" and client.listening != False :     #s'arrete si le serveur est coupé OU si on rentre QUIT
         message= input()
         client.send(message)

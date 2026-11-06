@@ -11,14 +11,14 @@ class Server():
         #Si le port est déjà pris, on redemande un autre port au user
         while True:
             try:
-                self.listener.bind(('', port))
+                self.listener.bind(('', port)) # Sur toutes les interfaces réseaux tu réserve le port
                 break
             except OSError:
                 print("Le port", port, "est déjà utilisé (ou le serveur vient d'être arrêté : attendre 1 minute)")
                 port= ask_port()
         self.listener.listen(1)
         print("Listening on port", port)
-        self.clients_sockets= []
+        self.clients_sockets= [] # La liste de tous les sockets clients actuellement connectés
 
     def run(self):
         while True:

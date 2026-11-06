@@ -39,15 +39,9 @@ class ClientListener(threading.Thread):
         # Si le client est deja deconnecté on ne fait rien
         if not self.listening:
             return
-
-        # On indique que le client est déconnecté
-        self.listening = False
-        
-        # On ferme la connection
-        self.socket.close()
-      
-        # On retire le client du server
-        self.server.remove_socket(self.socket)
+        self.listening = False      # On indique que le client est déconnecté
+        self.socket.close()         # On ferme la connection
+        self.server.remove_socket(self.socket)              # On retire le client du server
       
         #Pas d'annonce si le client n'avait pas de pseudo (ex : recherche de serveurs)
         if self.username != "No username":
